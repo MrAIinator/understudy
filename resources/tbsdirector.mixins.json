@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "tbs.director.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "OutgoingChatMixin",
+    "FakePlayerHurtMixin",
+    "MimicFluidMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

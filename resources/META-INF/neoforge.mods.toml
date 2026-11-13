@@ -1,0 +1,43 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mixins]]
+config = "tbsdirector.mixins.json"
+
+[[mods]]
+modId = "understudy"
+version = "3.1.0"
+displayName = "Understudy"
+logoFile = "understudy.png"
+authors = "MrAlinator"
+description = '''
+An unofficial add-on for The Broken Script. Something learns how you play — and starts playing in your place.
+A director watches each player and stages causal scares, mimics join pretending to be players, the world slowly dies, and a long ARG-style story (Protocol ECHO) unfolds in hidden caches and chat. English and Russian. Works in single player, on LAN and on dedicated servers — clients don't need it to join a server. Optional AI (bring your own key).
+
+Неофициальное дополнение к The Broken Script. Что-то изучает, как ты играешь, — и начинает играть вместо тебя.
+Режиссёр следит за каждым игроком и устраивает испуги с видимой причиной, мимики заходят под видом игроков, мир медленно умирает, а в тайниках и чате разворачивается долгий ARG-сюжет «Протокол ЭХО». Русский и английский. Работает в одиночке, по сети и на хостинге — игрокам ставить мод для входа на сервер не нужно. ИИ по желанию (свой ключ).
+'''
+# Server-side logic: a client without the mod can join a server that has it, and vice versa.
+displayTest = "IGNORE_ALL_VERSION"
+
+[[dependencies.understudy]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.understudy]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.understudy]]
+modId = "thebrokenscript"
+type = "required"
+versionRange = "[2.0.5,)"
+ordering = "AFTER"
+side = "BOTH"

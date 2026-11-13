@@ -1,0 +1,20 @@
+# build output and local jars (old private builds contain an API key — never commit them)
+build/
+dist/
+out/
+*.jar
+*.class
+logs/
+stats-src/
+
+# local tooling
+.claude/
+.claudeignore
+.idea/
+.vscode/
+*.iml
+
+# anything that could hold a key
+*.key
+config.properties
+admin-key.txt

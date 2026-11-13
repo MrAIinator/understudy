@@ -1,0 +1,126 @@
+UNDERSTUDY — HOW TO CONNECT AN AI / КАК ПОДКЛЮЧИТЬ ИИ
+=====================================================
+
+The mod works fully WITHOUT any AI. An AI only makes Null improvise short lines about what you are doing.
+You use your own key and pay the provider yourself. Never share a config file or screenshot with a key in it.
+
+Мод полностью работает БЕЗ ИИ. ИИ лишь даёт Null импровизировать короткие реплики про то, что ты делаешь.
+Ключ — твой собственный, за запросы платишь сервису сам. Никому не показывай конфиг и скриншоты с ключом.
+
+
+------------------------------------------------------------------
+ENGLISH
+------------------------------------------------------------------
+
+WAY 1 — IN GAME (easiest)
+  Who can do it: the server owner (op level 4). In single player: a world with cheats on (or "Open to LAN" → Allow Cheats).
+  On a hosted server, type the commands in the server CONSOLE (without the leading /) — they don't end up in anyone's chat history.
+
+  Claude (Anthropic):   /nullAI key claude sk-ant-...        key: console.anthropic.com → API Keys
+  Grok (xAI):           /nullAI key grok xai-...             key: console.x.ai → API Keys
+  Anything else:        /nullAI custom <service>             then   /nullAI key custom <key>
+      services: openai, openrouter, gemini, deepseek, mistral, groq, ollama, lmstudio
+      other model:     /nullAI custom model <model id>
+      other service:   /nullAI custom url https://.../v1      (any OpenAI-compatible API)
+  Pick the model:       /nullAI model claude claude-haiku-5-5     /nullAI model grok grok-4     /nullAI model custom <id>
+  Remove a key:         /nullAI key claude clear   (grok / custom the same way)
+  Check:                /nullAI      — shows roles and keys (keys are shown masked: sk-ant-…wxyz)
+
+  Everything takes effect immediately and is saved to the config.
+
+WAY 2 — IN THE CONFIG FILE
+  1. Start the game/server once with the mod, then stop it (or just leave the world).
+  2. Open  config/understudy/config.properties
+       single player:   .minecraft/config/understudy/config.properties   (your launcher's instance folder)
+       hosting:         the server's file manager → config/understudy/config.properties
+  3. Paste the key after the "=" of the right line, with no spaces and no quotes:
+       apiKey=sk-ant-...              ← Claude
+       model=claude-sonnet-5-5        ← Claude model (claude-haiku-5-5 is cheaper, claude-opus-5-5 is smarter)
+       grokApiKey=xai-...             ← Grok
+       grokModel=grok-4               ← Grok model
+       customName=OpenRouter          ← any OpenAI-compatible service
+       customUrl=https://openrouter.ai/api/v1
+       customApiKey=sk-or-...
+       customModel=google/gemini-2.5-flash
+  4. Save the file (UTF-8). In game run  /null reload  or restart the server.
+
+  Ready-made custom values:
+       OpenAI       customUrl=https://api.openai.com/v1                              customModel=gpt-5-mini
+       OpenRouter   customUrl=https://openrouter.ai/api/v1                           customModel=google/gemini-2.5-flash
+       Gemini       customUrl=https://generativelanguage.googleapis.com/v1beta/openai customModel=gemini-2.5-flash
+       DeepSeek     customUrl=https://api.deepseek.com/v1                            customModel=deepseek-chat
+       Mistral      customUrl=https://api.mistral.ai/v1                              customModel=mistral-small-latest
+       Groq         customUrl=https://api.groq.com/openai/v1                         customModel=llama-3.3-70b-versatile
+       Ollama       customUrl=http://localhost:11434/v1   (no key)                   customModel=llama3.1
+       LM Studio    customUrl=http://localhost:1234/v1    (no key)                   customModel=the model loaded in LM Studio
+  Model names change over time — if requests fail, check the model id on the provider's site first.
+  Local models (Ollama / LM Studio) must run on the same machine as the world/server.
+
+WHO DOES WHAT (optional)
+  brain  — decides how to scare and who speaks;  speech — writes the line.
+  /nullAI brain claude|grok|custom    /nullAI speech claude|grok|custom    /nullAI swap
+  If the chosen AI is not set up, the first AI that is takes its role. One AI alone does both.
+
+COST CONTROL
+  maxAiCallsPerHour / maxAiCallsPerDay in the config are hard limits for the whole server
+  (default 20 per hour, 300 per day). Above them Null uses built-in lines for free.
+
+IF IT DOESN'T WORK
+  Look in logs/latest.log for lines with [understudy]:
+    "answered 401"  → wrong or revoked key        "answered 402/403" → no credits on the account
+    "answered 404"  → wrong customUrl or model    "unreachable"      → no internet / local model not running
+
+
+------------------------------------------------------------------
+РУССКИЙ
+------------------------------------------------------------------
+
+СПОСОБ 1 — В ИГРЕ (проще всего)
+  Кто может: владелец сервера (оп уровня 4). В одиночной игре — мир с читами (или «Открыть для сети» → «Читы: вкл.»).
+  На хостинге вводи команды в КОНСОЛИ сервера (без / в начале) — так ключ не останется ни у кого в истории чата.
+
+  Claude (Anthropic):   /nullAI key claude sk-ant-...        ключ: console.anthropic.com → API Keys
+  Grok (xAI):           /nullAI key grok xai-...             ключ: console.x.ai → API Keys
+  Любой другой:         /nullAI custom <сервис>              потом   /nullAI key custom <ключ>
+      сервисы: openai, openrouter, gemini, deepseek, mistral, groq, ollama, lmstudio
+      другая модель:   /nullAI custom model <id модели>
+      другой сервис:   /nullAI custom url https://.../v1      (любой OpenAI-совместимый API)
+  Выбрать модель:       /nullAI model claude claude-haiku-5-5     /nullAI model grok grok-4     /nullAI model custom <id>
+  Удалить ключ:         /nullAI key claude clear   (grok / custom — так же)
+  Проверить:            /nullAI      — роли и ключи (ключи показываются скрыто: sk-ant-…wxyz)
+
+  Всё действует сразу и сохраняется в конфиг.
+
+СПОСОБ 2 — В ФАЙЛЕ КОНФИГА
+  1. Один раз запусти игру/сервер с модом и выключи (или просто выйди из мира).
+  2. Открой  config/understudy/config.properties
+       одиночка:  .minecraft/config/understudy/config.properties   (папка сборки в твоём лаунчере)
+       хостинг:   файловый менеджер сервера → config/understudy/config.properties
+  3. Вставь ключ после «=» в нужной строке, без пробелов и кавычек:
+       apiKey=sk-ant-...              ← Claude
+       model=claude-sonnet-5-5        ← модель Claude (claude-haiku-5-5 дешевле, claude-opus-5-5 умнее)
+       grokApiKey=xai-...             ← Grok
+       grokModel=grok-4               ← модель Grok
+       customName=OpenRouter          ← любой OpenAI-совместимый сервис
+       customUrl=https://openrouter.ai/api/v1
+       customApiKey=sk-or-...
+       customModel=google/gemini-2.5-flash
+  4. Сохрани файл (в UTF-8). В игре введи  /null reload  или перезапусти сервер.
+
+  Готовые значения для custom — в таблице в английской части выше (адреса и модели одинаковые).
+  Названия моделей со временем меняются — если запросы не проходят, сначала проверь id модели на сайте сервиса.
+  Локальные модели (Ollama / LM Studio) должны работать на том же компьютере, где мир/сервер.
+
+КТО ЗА ЧТО ОТВЕЧАЕТ (необязательно)
+  brain — «мозг»: решает, чем пугать и кто говорит;  speech — «речь»: пишет реплику.
+  /nullAI brain claude|grok|custom    /nullAI speech claude|grok|custom    /nullAI swap
+  Если выбранный ИИ не настроен, его роль берёт первый настроенный. Один ИИ справляется и с тем, и с другим.
+
+КОНТРОЛЬ РАСХОДОВ
+  maxAiCallsPerHour / maxAiCallsPerDay в конфиге — жёсткие лимиты на весь сервер
+  (по умолчанию 20 в час и 300 в сутки). Сверх них Null бесплатно говорит готовыми фразами.
+
+ЕСЛИ НЕ РАБОТАЕТ
+  Смотри logs/latest.log, строки с [understudy]:
+    «answered 401»  → неверный или отозванный ключ     «answered 402/403» → на счету нет денег
+    «answered 404»  → неверный customUrl или модель    «unreachable»      → нет интернета / локальная модель не запущена
