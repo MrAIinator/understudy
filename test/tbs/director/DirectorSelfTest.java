@@ -262,6 +262,17 @@ public final class DirectorSelfTest {
             String guide = java.nio.file.Files.readString(cd.resolve("AI-SETUP.txt"), java.nio.charset.StandardCharsets.UTF_8);
             check(guide.contains("/nullAI key claude") && guide.contains("customUrl=") && guide.contains("КАК ПОДКЛЮЧИТЬ ИИ"), "AI-SETUP.txt written next to the config (EN + RU)");
         }
+        {
+            check(!Echo.copyAllowed(Echo.CLAN_VOID) && Echo.copyAllowed(net.minecraft.world.level.Level.OVERWORLD) && Echo.copyAllowed(net.minecraft.world.level.Level.NETHER),
+                    "echo: never copies inside The Broken Script dimensions (clan_void etc.)");
+            java.nio.file.Path echoDir = java.nio.file.Files.createTempDirectory("understudy-echo");
+            java.nio.file.Files.createDirectories(echoDir.resolve("echoes"));
+            java.nio.file.Files.writeString(echoDir.resolve("echoes").resolve("a1.dat"), "x");
+            java.nio.file.Files.writeString(echoDir.resolve("echoes").resolve("b2.dat"), "x");
+            java.nio.file.Files.writeString(echoDir.resolve("echoes").resolve("keep.txt"), "x");
+            check(Echo.libraryCount(echoDir) == 2 && Echo.clearLibrary(echoDir) == 2 && Echo.libraryCount(echoDir) == 0
+                    && java.nio.file.Files.exists(echoDir.resolve("echoes").resolve("keep.txt")), "echo: /null echoes clear deletes only saved copies");
+        }
         System.out.println(fails == 0 ? "ALL OK" : fails + " FAILED");
         System.exit(fails == 0 ? 0 : 1);
     }

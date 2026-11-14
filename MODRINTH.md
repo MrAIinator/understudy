@@ -49,7 +49,7 @@ customApiKey=sk-or-...     customModel=google/gemini-2.5-flash
 Keys are never shown in full and never written to the log. Hard limits (`maxAiCallsPerHour`, `maxAiCallsPerDay`) keep the bill under control. **Never share a config or screenshot with your key.**
 
 ### Admin commands
-`/null status | on | off | reload | scare <player> | mimic <player> | why <player>` · `/nullAI` · `/tbsecho`
+`/null status | on | off | reload | scare <player> | mimic <player> | why <player> | echoes [clear]` · `/nullAI` · `/tbsecho`
 
 ---
 
@@ -94,7 +94,7 @@ customApiKey=sk-or-...     customModel=google/gemini-2.5-flash
 Ключ нигде не показывается целиком и не пишется в лог. Жёсткие лимиты (`maxAiCallsPerHour`, `maxAiCallsPerDay`) держат расходы под контролем. **Никому не показывай конфиг и скриншоты с ключом.**
 
 ### Команды админа
-`/null status | on | off | reload | scare <ник> | mimic <ник> | why <ник>` · `/nullAI` · `/tbsecho`
+`/null status | on | off | reload | scare <ник> | mimic <ник> | why <ник> | echoes [clear]` · `/nullAI` · `/tbsecho`
 
 ---
 *Not affiliated with the authors of The Broken Script. Contains none of its code or assets.*

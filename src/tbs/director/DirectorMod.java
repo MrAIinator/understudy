@@ -1157,6 +1157,20 @@ public final class DirectorMod {
                     c.getSource().sendSuccess(() -> Component.literal("[Null] " + decay.describe(L.ru(c.getSource()))), true);
                     return 1;
                 }))))
+                .then(Commands.literal("echoes").executes(c -> {
+                    int n = Echo.libraryCount(libDir == null ? dir : libDir);
+                    c.getSource().sendSuccess(() -> Component.literal(L.tr(c.getSource(),
+                            "[Null] Сохранённых копий построек: " + n + ". Удалить все: /null echoes clear",
+                            "[Null] Saved build copies: " + n + ". Delete all: /null echoes clear")), false);
+                    return n;
+                }).then(Commands.literal("clear").requires(s -> s.hasPermission(4)).executes(c -> {
+                    int n = Echo.clearLibrary(libDir == null ? dir : libDir);
+                    LOG.info("[understudy] {} cleared {} saved build copies", c.getSource().getTextName(), n);
+                    c.getSource().sendSuccess(() -> Component.literal(L.tr(c.getSource(),
+                            "[Null] Удалено сохранённых копий: " + n + ". Уже поставленные в мире постройки остаются — их можно снести вручную.",
+                            "[Null] Deleted saved copies: " + n + ". Copies already placed in the world stay — remove them by hand if needed.")), true);
+                    return n;
+                })))
                 .then(Commands.literal("why").then(Commands.argument("player", EntityArgument.player()).executes(c -> {
                     ServerPlayer p = EntityArgument.getPlayer(c, "player");
                     String text = snapshot(p, watch(p)).describe();

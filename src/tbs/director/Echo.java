@@ -91,8 +91,43 @@ public final class Echo {
     }
 
     /** Копирует постройку вокруг игрока. null — рядом нет настоящей постройки. */
+    /** Копируем только постройки игроков: в измерениях самого TBS (clan_void, library, backrooms…) всё — родные структуры мода. */
+    static boolean copyAllowed(ResourceKey<Level> dim) {
+        return !TbsWorld.NS.equals(dim.location().getNamespace());
+    }
+
+    /** Удаляет все сохранённые копии построек (config/understudy/echoes). Возвращает, сколько удалено. */
+    static int clearLibrary(Path dir) {
+        int n = 0;
+        Path lib = dir.resolve("echoes");
+        if (!Files.isDirectory(lib)) {
+            return 0;
+        }
+        try (Stream<Path> files = Files.list(lib)) {
+            for (Path f : (Iterable<Path>) files::iterator) {
+                if (f.getFileName().toString().endsWith(".dat") && Files.deleteIfExists(f)) {
+                    n++;
+                }
+            }
+        } catch (Exception e) {
+            DirectorMod.LOG.warn("[understudy] could not clear echoes: {}", e.toString());
+        }
+        return n;
+    }
+
+    static int libraryCount(Path dir) {
+        try (Stream<Path> files = Files.list(dir.resolve("echoes"))) {
+            return (int) files.filter(f -> f.getFileName().toString().endsWith(".dat")).count();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     static Piece capture(ServerPlayer p, int decayStage) {
         ServerLevel l = p.serverLevel();
+        if (!copyAllowed(l.dimension())) {
+            return null;
+        }
         BlockPos c = p.blockPosition();
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
