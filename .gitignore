@@ -18,3 +18,4 @@ stats-src/
 *.key
 config.properties
 admin-key.txt
+bundled-keys.properties

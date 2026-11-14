@@ -313,7 +313,7 @@ public final class DirectorConfig {
                 }
             }
             c.enabled = bool(p, "enabled", true);
-            c.apiKey = p.getProperty("apiKey", "").trim();
+            c.apiKey = orBundled(p, "apiKey");
             c.model = p.getProperty("model", c.model).trim();
             c.effort = p.getProperty("effort", c.effort).trim();
             c.minGapSeconds = Math.max(30, intOf(p, "minGapSeconds", c.minGapSeconds));
@@ -338,11 +338,11 @@ public final class DirectorConfig {
             c.echoMinutes = Math.max(5, intOf(p, "echoMinutes", c.echoMinutes));
             c.ambientEnabled = bool(p, "ambientEnabled", true);
             c.aiActivity = dbl(p, "aiActivity", 1.5, 0.3, 5.0);
-            c.grokApiKey = p.getProperty("grokApiKey", "").trim();
+            c.grokApiKey = orBundled(p, "grokApiKey");
             c.grokModel = p.getProperty("grokModel", c.grokModel).trim();
             c.customName = p.getProperty("customName", "").trim();
             c.customUrl = p.getProperty("customUrl", "").trim();
-            c.customApiKey = p.getProperty("customApiKey", "").trim();
+            c.customApiKey = orBundled(p, "customApiKey");
             c.customModel = p.getProperty("customModel", "").trim();
             c.brain = role(p.getProperty("brain", c.brain));
             c.speech = role(p.getProperty("speech", c.speech));
@@ -396,6 +396,28 @@ public final class DirectorConfig {
         } catch (Exception e) {
             DirectorMod.LOG.warn("[understudy] could not append new options: {}", e.toString());
         }
+    }
+
+    /**
+     * Private builds only: keys placed in the jar at /understudy/bundled-keys.properties at build time.
+     * Public builds and the git repository never contain this file. A key in the config always wins;
+     * "/nullAI key <ai> clear" writes an empty value, which also falls back to the bundled key.
+     */
+    static final Properties BUNDLED = new Properties();
+
+    static {
+        try (InputStream in = DirectorConfig.class.getResourceAsStream("/understudy/bundled-keys.properties")) {
+            if (in != null) {
+                BUNDLED.load(new java.io.InputStreamReader(in, StandardCharsets.UTF_8));
+            }
+        } catch (Exception ignored) {
+            // no bundled keys
+        }
+    }
+
+    private static String orBundled(Properties p, String key) {
+        String v = p.getProperty(key, "").trim();
+        return v.isEmpty() ? BUNDLED.getProperty(key, "").trim() : v;
     }
 
     /** AI-SETUP.txt next to the config: how to connect an AI (EN + RU). Refreshed on every start. */
