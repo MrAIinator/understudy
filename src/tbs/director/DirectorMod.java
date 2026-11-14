@@ -254,6 +254,7 @@ public final class DirectorMod {
         memory = new Memory(worldDir);
         hunt = new Hunt(worldDir);
         story = new Story(worldDir);
+        PlayerBuilt.load(worldDir);
         libDir = dir;
         moveLibraryToConfig();
         startWeb();
@@ -296,6 +297,7 @@ public final class DirectorMod {
             s.stop();
         }
         Mimic.CHASES.clear();
+        PlayerBuilt.close();
         server = null;
     }
 
@@ -314,6 +316,9 @@ public final class DirectorMod {
     }
 
     private void onBreak(BlockEvent.BreakEvent e) {
+        if (e.getLevel() instanceof net.minecraft.world.level.Level lv && !lv.isClientSide()) {
+            PlayerBuilt.broken(lv, e.getPos());
+        }
         if (e.getPlayer() instanceof ServerPlayer p) {
             push(watch(p).mined, now());
         }
@@ -322,6 +327,14 @@ public final class DirectorMod {
     private void onPlace(BlockEvent.EntityPlaceEvent e) {
         if (e.getEntity() instanceof ServerPlayer p) {
             push(watch(p).placed, now());
+            // запоминаем, что этот блок поставил игрок: эхо копирует только такие
+            if (e instanceof BlockEvent.EntityMultiPlaceEvent multi) {
+                for (var snap : multi.getReplacedBlockSnapshots()) {
+                    PlayerBuilt.placed(p.level(), snap.getPos(), p.level().getBlockState(snap.getPos()));
+                }
+            } else {
+                PlayerBuilt.placed(p.level(), e.getPos(), e.getPlacedBlock());
+            }
         }
     }
 
@@ -389,6 +402,9 @@ public final class DirectorMod {
         if (server != null) {
             Mimic.tick(server);
             Scream.tick(server);
+        }
+        if (ticks % 6000 == 0) {
+            PlayerBuilt.save(); // раз в 5 минут
         }
         if (++ticks % 40 != 0 || server == null) {
             return;

@@ -11,18 +11,26 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Язык игрока. Русский — если язык клиента ru_*, uk_ua, be_by или kk_kz; иначе английский.
+ * Язык игрока. Русский — для языков из RU_LOCALES; иначе английский.
  * Язык берётся из настроек клиента (ServerPlayer.clientInformation().language()).
  */
 final class L {
     private L() {}
+
+    /**
+     * Языки, чьи носители в большинстве читают по-русски: русский (и дореформенный), украинский, белорусский,
+     * казахский, узбекский, киргизский, таджикский, туркменский, армянский, азербайджанский, грузинский,
+     * татарский, башкирский, чувашский, якутский, удмуртский. Всем остальным — английский.
+     */
+    static final java.util.Set<String> RU_LOCALES = java.util.Set.of("ru_ru", "rpr", "uk_ua", "be_by", "be_latn", "kk_kz", "uz_uz", "ky_kg",
+            "tg_tj", "tk_tm", "hy_am", "az_az", "ka_ge", "tt_ru", "ba_ru", "cv_ru", "sah_sah", "udm_ru", "os_ru", "ce_ru");
 
     static boolean ru(String lang) {
         if (lang == null) {
             return false;
         }
         String l = lang.trim().toLowerCase(Locale.ROOT);
-        return l.startsWith("ru") || l.equals("uk_ua") || l.equals("be_by") || l.equals("kk_kz");
+        return RU_LOCALES.contains(l) || l.startsWith("ru_") || l.startsWith("rpr");
     }
 
     static boolean ru(ServerPlayer p) {

@@ -137,7 +137,8 @@ public final class Echo {
         java.util.Map<Long, Integer> floor = new java.util.HashMap<>();
         for (BlockPos pos : BlockPos.betweenClosed(c.offset(-16, -6, -16), c.offset(16, 14, 16))) {
             BlockState s = l.getBlockState(pos);
-            if (Decay.isBuilt(s)) {
+            // только то, что поставил игрок: сгенерированные деревни, руины и постройки TBS не копируем
+            if (!s.isAir() && PlayerBuilt.has(l, pos)) {
                 floor.merge(column(pos.getX(), pos.getZ()), pos.getY(), Math::min);
                 built++;
                 kinds.add(s.getBlock());
@@ -170,9 +171,8 @@ public final class Echo {
             if (s.isAir()) {
                 continue;
             }
-            // природные блоки берём только как фундамент: под постройкой и вплотную к ней.
-            // Холмы, деревья и трава вокруг в копию не попадают — иначе вместо дома переносится кусок ландшафта.
-            if (!Decay.isBuilt(s) && !isFoundation(floor, pos)) {
+            // только блоки, поставленные игроком; землю под копией при установке досыпает put(..., grounded)
+            if (!PlayerBuilt.has(l, pos)) {
                 continue;
             }
             BlockState t = sanitize(s, r, missing);
@@ -186,7 +186,7 @@ public final class Echo {
         var reg = l.registryAccess();
         List<CompoundTag> inv = new ArrayList<>();
         for (BlockPos pos : BlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
-            if (l.getBlockEntity(pos) instanceof net.minecraft.world.Container box && !(box instanceof net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity)) {
+            if (PlayerBuilt.has(l, pos) && l.getBlockEntity(pos) instanceof net.minecraft.world.Container box && !(box instanceof net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity)) {
                 ListTag items = new ListTag();
                 for (int slot = 0; slot < box.getContainerSize(); slot++) {
                     net.minecraft.world.item.ItemStack st = cleanItem(box.getItem(slot));

@@ -273,6 +273,22 @@ public final class DirectorSelfTest {
             check(Echo.libraryCount(echoDir) == 2 && Echo.clearLibrary(echoDir) == 2 && Echo.libraryCount(echoDir) == 0
                     && java.nio.file.Files.exists(echoDir.resolve("echoes").resolve("keep.txt")), "echo: /null echoes clear deletes only saved copies");
         }
+        {
+            java.nio.file.Path wd = java.nio.file.Files.createTempDirectory("understudy-built");
+            PlayerBuilt.load(wd);
+            PlayerBuilt.add("minecraft:overworld", 42L);
+            PlayerBuilt.add("minecraft:overworld", 43L);
+            PlayerBuilt.add("thebrokenscript:clan_void", 7L);
+            PlayerBuilt.remove("minecraft:overworld", 43L);
+            PlayerBuilt.close();
+            PlayerBuilt.load(wd);
+            check(PlayerBuilt.has("minecraft:overworld", 42L) && !PlayerBuilt.has("minecraft:overworld", 43L)
+                    && PlayerBuilt.has("thebrokenscript:clan_void", 7L) && !PlayerBuilt.has("minecraft:the_nether", 42L)
+                    && PlayerBuilt.count("minecraft:overworld") == 1, "player-built blocks: tracked per dimension, removed on break, survive restart");
+            PlayerBuilt.close();
+        }
+        check(L.ru("uk_ua") && L.ru("BE_BY") && L.ru("kk_kz") && L.ru("uz_uz") && L.ru("ky_kg") && L.ru("ru_ru") && L.ru("rpr")
+                && !L.ru("en_us") && !L.ru("pt_br") && !L.ru("es_es") && !L.ru("pl_pl") && !L.ru("de_de") && !L.ru((String) null), "lang: Russian for the CIS languages, English for everyone else");
         System.out.println(fails == 0 ? "ALL OK" : fails + " FAILED");
         System.exit(fails == 0 ? 0 : 1);
     }

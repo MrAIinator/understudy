@@ -169,9 +169,13 @@ public final class DirectorConfig {
             new Opt(null, null, null, "decayMinutesPerStage", "360"),
             new Opt(null, """
                     Echo: sometimes the world takes a copy of a player's build and places it far away.
-                    At most once per this many minutes for the whole server.""", """
+                    Only blocks placed by players (tracked since Understudy 3.1.2 was installed) are copied - never villages,
+                    ruins or The Broken Script's own structures. At most once per this many minutes for the whole server.
+                    Saved copies: /null echoes (count), /null echoes clear (delete all).""", """
                     Эхо: иногда мир забирает копию постройки игрока и ставит её где-то далеко.
-                    Не чаще раза в столько минут на весь сервер.""", "echoEnabled", "true"),
+                    Копируются только блоки, поставленные игроками (учёт ведётся с установки Understudy 3.1.2), — не деревни,
+                    не руины и не постройки самого The Broken Script. Не чаще раза в столько минут на весь сервер.
+                    Сохранённые копии: /null echoes (сколько), /null echoes clear (удалить все).""", "echoEnabled", "true"),
             new Opt(null, null, null, "echoMinutes", "40"),
 
             new Opt("STORY: PROTOCOL ECHO / СЮЖЕТ «ПРОТОКОЛ ЭХО»", """
